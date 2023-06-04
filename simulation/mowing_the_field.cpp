@@ -12,61 +12,54 @@ const int maxN = 2005;
 const int mod = 1e9 + 7;
 int grid[maxN][maxN], step[maxN], n, Time;
 char direction[maxN]; 
+set<int> ans;
 int check(int x, int y){
     if(grid[x][y] >= 1){
        return Time - grid[x][y];
     }
     else return -1;
 }
+void process(int x, int y, int &vl){
+    int val = check(x, y);
+    if(check(x, y) >= 0) ans.insert(val);
+    grid[x][y] = Time; 
+    Time++, vl--;
+}
+
 int solve(){
 
     int x = 1001, y = 1001;
-    set<int> ans;
 
     foru(j, 1, n){
         int value = step[j];
        if(direction[j] == 'N'){
             while(value >= 1){
                 x--;
-                int val = check(x, y);
-                if(val >= 0) ans.insert(val);
-                grid[x][y] = Time;
-                Time++, value--;
+                process(x, y, value);
             }
         }
+        
         if(direction[j] == 'E'){
             while(value >= 1){
                 y++;
-
-                int val = check(x, y);
-                if(val >= 0) ans.insert(val);
-                grid[x][y] = Time; 
-                Time++, value--;
+                process(x, y, value);
             }
-
         }
-
+        
         if(direction[j] == 'S'){
             while(value >= 1){
                 x++;
-
-                int val = check(x, y);
-                if(check(x, y) >= 0) ans.insert(val);
-                grid[x][y] = Time; 
-                Time++, value--;
+                process(x, y, value);
             }
         }
 
         if(direction[j] == 'W'){
             while(value >= 1){
                 y--;
-
-                int val = check(x, y);
-                if(val >= 0) ans.insert(val);
-                grid[x][y] = Time;
-                Time++, value--;
+                process(x, y, value);
             }
         }
+        
     }
     if(ans.empty()) return -1;
     else return *ans.begin(); 
