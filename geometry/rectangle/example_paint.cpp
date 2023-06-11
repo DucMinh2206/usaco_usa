@@ -12,8 +12,8 @@ const int maxN = 55;
 const ld inf = 1e17;
 int a, b, c, d;
 signed main(){
-    // freopen("paint.in", "r", stdin);
-    // freopen("paint.out", "w", stdout);
+    freopen("paint.in", "r", stdin);
+    freopen("paint.out", "w", stdout);
 
     cin >> a >> b;
     cin >> c >> d;
