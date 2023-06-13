@@ -14,11 +14,15 @@ using namespace std;
 #define IOS ios_base:: sync_with_stdio(false); cin.tie(0); cout.tie(0);
 #define mp(a, b) make_pair(a, b)
 
-const int maxN = 1000 + 5;
-const long long inf = 1e17;
+const int maxN = 1e5  + 5;
+const long long inf = 1e9;
 int arr[maxN];
-map<int, int> cnt;
+map<int, int> cnt, before;
 void prime_factor(int val){
+    if(val <= 1){
+        return;
+    }
+
     int before_val = val;
     while(val % 2 == 0){
         val = val / 2;
@@ -47,6 +51,7 @@ signed main(){
     auto start =  high_resolution_clock::now();
     #endif
     // running
+
     cin >> t;
     while(t--){
         int n, sum = 0;
@@ -56,56 +61,62 @@ signed main(){
             cin >> arr[i];
             sum += arr[i];
         }
+        
         prime_factor(sum);
-        int check = arr[1];
-        bool ans = false;
+        int sum_check = 0;
         // check condition full equal
-        foru(i, 1, n){
-            if(check != arr[i]) break;
-
-            if(i == n){
-                check = true;
-                break;
+        foru(i, 2, n){
+            if(arr[i] == arr[1]){
+                sum_check++;
             }
         }
-        if(check == true){
-            cout << "0";
+
+        if(sum_check == n - 1){
+            cout << 0 << endl;
             continue;
         }
-
+       
+        int ans = inf;
         map<int, int>:: iterator it;
-        int ans = 0;
-        bool check_ans = false;
+        cnt[1] = 1;
+
         for(it = cnt.begin(); it != cnt.end(); it++){
-            int val = it -> first;
-            if(sum / val > n) continue;
-
-            int current = 0, counting = 0;
-            foru(i, 1, n){
-                current = arr[i];
-                if(current > sum / val) continue;
-                if(current == sum / val){
-                    continue;
-                }
-
-                foru(j, i + 1, n){
-                    current += arr[j];
-                    if(current == sum / val){
-                        i = j + 1;
-                        counting++;
-                        break;
-                    }
-                }
-            }
+            cout << it -> first << " " << sum  << endl;
             
+            int j = 1, check_ans = 0, curr = 0;
 
+            int need_occurrence = it -> first;
+            int need_val = sum / need_occurrence;
+
+            if(need_occurrence > n) continue;
+
+            while(j <= n){
+                if(curr < need_val){
+                    curr += arr[j];
+                }
+                if(curr > need_val){
+                    break;
+                }
+                if(curr == need_val){
+                    check_ans += curr;
+                    curr = 0;
+                }
+                j++;
+            }
+
+            if(check_ans == sum){
+                ans = min(n - need_occurrence, ans);
+            }
+            else continue;
+            
         }
+        cout << ans << endl;
+        cnt = before;
 
     }
-    // end
     #ifdef MINHDEPTRAI
     auto end = high_resolution_clock::now();
     auto exacution = duration_cast<microseconds> (end - start);
-    cout << "  "<< exacution.count() / 1000 << "ms";
+    cout << exacution.count() << "ms";
     #endif
 }
