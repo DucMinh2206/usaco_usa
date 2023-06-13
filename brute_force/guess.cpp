@@ -1,5 +1,5 @@
 
-#define MINHDEPTRAI 1
+
 #ifdef MINHDEPTRAI
 #include "/Library/Developer/CommandLineTools/usr/include/c++/v1/bits/stdc++.h"  
 #include <chrono>
