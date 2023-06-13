@@ -1,4 +1,4 @@
-
+// Because we have to store 3 string in data structures, so we can use unordered_set with time complexity is O(1) because we have few strings so it is hard to get O(N)l
 #ifdef MINHDEPTRAI
 #include "/Library/Developer/CommandLineTools/usr/include/c++/v1/bits/stdc++.h"  
 #include <chrono>
