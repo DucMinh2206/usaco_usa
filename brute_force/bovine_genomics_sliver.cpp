@@ -194,3 +194,74 @@ signed main(){
     #endif
     
 }
+
+//AC
+
+#include <iostream>
+#include <unordered_set>
+#include <vector>
+
+using namespace std;
+
+const int maxN = 500 + 5;
+const int maxM = 50 + 5;
+
+char normal[maxN][maxM], spoty[maxN][maxM];
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    
+
+    freopen("cownomics.in", "r", stdin);
+    freopen("cownomics.out", "w", stdout);
+    int n, m;
+    cin >> n >> m;
+
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 1; j <= m; ++j) {
+            cin >> spoty[i][j];
+        }
+    }
+
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 1; j <= m; ++j) {
+            cin >> normal[i][j];
+        }
+    }
+
+    int ans = 0;
+    for (int i = 1; i <= m; ++i) {
+        for (int j = i + 1; j <= m; ++j) {
+            for (int k = j + 1; k <= m; ++k) {
+                unordered_set<int> no, spo;
+                for (int p = 1; p <= n; ++p) {
+                    int current_no = (normal[p][i] << 16) + (normal[p][j] << 8) + normal[p][k];
+                    no.insert(current_no);
+                }
+                for (int p = 1; p <= n; ++p) {
+                    int current_spo = (spoty[p][i] << 16) + (spoty[p][j] << 8) + spoty[p][k];
+                    spo.insert(current_spo);
+                }
+                bool check = true;
+                for (int p = 1; p <= n; ++p) {
+                    int current_spo = (spoty[p][i] << 16) + (spoty[p][j] << 8) + spoty[p][k];
+                    if (no.count(current_spo) > 0) {
+                        check = false;
+                        break;
+                    }
+                }
+                
+                if (check) {
+                    ++ans;
+                }
+            }
+        }
+    }
+
+    cout << ans << endl;
+
+    return 0;
+}
+
