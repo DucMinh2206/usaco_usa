@@ -1,5 +1,4 @@
 
-#define MINHDEPTRAI 1
 #ifdef MINHDEPTRAI
 #include "/Library/Developer/CommandLineTools/usr/include/c++/v1/bits/stdc++.h"  
 #include <chrono>
@@ -17,27 +16,54 @@ using namespace std;
 const int maxN = 1e5  + 5;
 const long long inf = 1e9;
 int arr[maxN];
-map<int, int> cnt, before;
+int cnt[maxN];
+vector<int> counting, counting_two;
 void prime_factor(int val){
+    counting.push_back(1);
+    counting_two.push_back(1);
+
     if(val <= 1){
         return;
     }
+    
 
     int before_val = val;
     while(val % 2 == 0){
-        val = val / 2;
-        cnt[2] = 1;
+         
+         for(int j = 0; j < counting.size(); j++){
+            if(cnt[counting[j] * 2] == 0){
+                counting_two.push_back(counting[j] * 2);
+                cnt[counting[j] * 2] = 1;
+            }
+         }
+
+         val = val / 2;
+         counting = counting_two;
     }
 
-    foru(j, 3, sqrt(before_val)){
-        while(val % 3 == 0){
-            val = val / 3;
-            cnt[3] = 1;
+    foru(i, 3, sqrt(before_val)){
+        while(val % i == 0){
+            for(int j = 0; j < (int) counting.size(); j++){
+                if(cnt[counting[j] * i] == 0){
+                    counting_two.push_back(counting[j] * i);
+                    cnt[counting[j] * i] = 1;
+                }
+            }
+            val = val / i;
+            counting = counting_two;
         }
     }
+
     if(val > 2){
-        cnt[val] = 1;
+       for(int j = 0; j < (int) counting.size(); j++){
+                if(cnt[counting[j] * val] == 0){
+                    counting_two.push_back(counting[j] * val);
+                    cnt[counting[j] * val] = 1;
+                }
+        }
     }
+    counting = counting_two;
+
 }
 int t;
 signed main(){
@@ -54,6 +80,8 @@ signed main(){
 
     cin >> t;
     while(t--){
+        fill(cnt, cnt + maxN, 0);
+        
         int n, sum = 0;
         cin >> n;
 
@@ -70,22 +98,19 @@ signed main(){
                 sum_check++;
             }
         }
-
         if(sum_check == n - 1){
             cout << 0 << endl;
             continue;
         }
        
         int ans = inf;
-        map<int, int>:: iterator it;
-        cnt[1] = 1;
-
-        for(it = cnt.begin(); it != cnt.end(); it++){
-            cout << it -> first << " " << sum  << endl;
+        for(int k = (int)counting.size() - 1; k >= 0; k--){
+            // cout << counting[k] << " check  ";
+            // cout << endl;
             
             int j = 1, check_ans = 0, curr = 0;
 
-            int need_occurrence = it -> first;
+            int need_occurrence = counting[k];
             int need_val = sum / need_occurrence;
 
             if(need_occurrence > n) continue;
@@ -110,10 +135,11 @@ signed main(){
             else continue;
             
         }
-        cout << ans << endl;
-        cnt = before;
-
+         cout << ans << endl;
+         counting_two.clear();
+         counting.clear();
     }
+
     #ifdef MINHDEPTRAI
     auto end = high_resolution_clock::now();
     auto exacution = duration_cast<microseconds> (end - start);
