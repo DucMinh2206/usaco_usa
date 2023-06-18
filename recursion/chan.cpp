@@ -1,4 +1,4 @@
-#define MINHDEPTRAI 1
+
 #ifdef MINHDEPTRAI
 #include "/Library/Developer/CommandLineTools/usr/include/c++/v1/bits/stdc++.h"  
 #include <chrono>
@@ -22,36 +22,36 @@ const long long inf = 1e17;
 int cnt[maxN];
 multiset<int> barn_one, barn_two;
 multiset<int> :: iterator it, it_two;
-unordered_set<int> ans;
+set<int> ans;
 void back_tracking(int cnt, int sum){
+     //cout << cnt << " " << sum << endl;
     if(cnt == 4){
         ans.insert(sum);
         return;
     }
 
     if(cnt % 2 == 0){
-        for(auto it = barn_one.begin(); it != barn_one.end();){
-            int val = *it;
-            cout << cnt << " one -> two " << val << endl;
+        vector<int> values(barn_one.begin(), barn_one.end());
+        for(int val : values){
+            //cout << cnt << " one -> two " << val << " " << barn_one.size()<< endl;
             sum -= val;
             barn_two.insert(val);
-            barn_one.erase(it);
+            barn_one.erase(barn_one.find(val));
             cnt++;
-            back_tracking(cnt, sum);
+             back_tracking(cnt, sum);
 
             sum += val;
             barn_two.erase(barn_two.find(val));
             barn_one.insert(val);
             cnt--;
-            sum += val;
         }
     }
     else{
-        
-         for(auto it_two = barn_two.begin(); it != barn_two.end();){
-            int val_two = *it_two;
-            cout << cnt << " two -> one " << val_two << endl;
+        vector<int> values(barn_two.begin(), barn_two.end());
+        for(int val_two : values){
             sum += val_two;
+
+            //cout << cnt << " two -> one " << val_two << " " << barn_two.size()<< endl;
             barn_one.insert(val_two);
             barn_two.erase(barn_two.find(val_two));
             cnt++;
@@ -66,15 +66,26 @@ void back_tracking(int cnt, int sum){
     }
 }
 signed main(){
-    //   freopen("lineup.in", "r", stdin);
-    //   freopen("lineup.out", "w", stdout);
+      freopen("backforth.in", "r", stdin);
+      freopen("backforth.out", "w", stdout);
     // input
     IOS
-   std::set<int> barn_one = {1, 2, 3, 4, 5};
-    int sum = 0;
-
-    //back_tracking(0, 1000);
-    //cout << ans.size();
+    foru(i, 1, 10){
+        int val;
+        cin >> val;
+        cnt[val]++;
+        if(cnt[val] <= 2) barn_one.insert(val);
+    }
+    fill(cnt, cnt + maxN, 0);
+    foru(i, 1, 10){
+        int val;
+        cin >> val;
+        cnt[val]++;
+        if(cnt[val] <= 2) barn_two.insert(val);
+    }
+    
+    back_tracking(0, 1000);
+    cout << ans.size();
 
    
 }
