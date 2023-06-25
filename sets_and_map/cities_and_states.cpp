@@ -1,4 +1,3 @@
-
 #ifdef MINHDEPTRAI
 
 #include "/Library/Developer/CommandLineTools/usr/include/c++/v1/bits/stdc++.h"
@@ -16,17 +15,13 @@ using namespace std;
 #define mp(a, b) make_pair(a, b)
 #define endl '\n'
 #define int long long
-const string name_minh = "4";
+const string name_minh = "citystate";
 const int maxN = 1e6 + 500;
 const int mod = 1000003;
 const long long inf = 1e17;
 
-unordered_set<int> cities[maxN];
-set<int> pairs;
-int hash_code(string a){
-    return (a[0] - 'A' + 1) * 107 + (a[1] - 'A' + 1) * 103  ;
-}
-bool check = false;
+map<string, map<string, int>> cities;
+set<pair<string, string>> couple;
 signed main(){
     IOS
     #ifndef MINHDEPTRAI 
@@ -34,10 +29,8 @@ signed main(){
     ofstream cout(name_minh + ".out");
     #endif
 
-    ifstream cin(name_minh + ".in");
-    ofstream cout(name_minh + ".out");
 
-    int n, cnt = 0;
+    int n;
     cin >> n;
 
     foru(i, 1, n){
@@ -45,26 +38,14 @@ signed main(){
         cin >> a >> b;
         a = a.substr(0, 2);
         //cout << a << " " << b << endl;
-        int change = hash_code(a), change_b = hash_code(b);
-        
-        if(a == b){
-            continue;
-
-        }
-
-        cities[change].insert(change_b);
-        pairs.insert(change);
+        if(a == b) continue;
+        cities[a][b]++;
+        couple.insert(mp(a, b));
     }
-
-    for(int city: pairs){
-        for(int val : cities[city]){
-            
-            if(cities[val].count(city)){
-                //cout << val << " " << city << endl;
-                cnt++;
-            }
-        }
+    int ans = 0;
+    for(pair<string, string> coup : couple){
+        ans += cities[coup.first][coup.second] * cities[coup.second][coup.first];
     }
-
-    cout << cnt / 2;
+    ans /= 2;
+    cout << ans;
 }
