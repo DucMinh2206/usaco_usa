@@ -1,7 +1,7 @@
 // #pragma GCC optimize("Ofast")
 // #pragma GCC target("avx,avx2,fma")
 // #pragma GCC optimize("unroll-loops")
-#define MINHDEPTRAI 1
+
 #ifdef MINHDEPTRAI
  
 #include "/Library/Developer/CommandLineTools/usr/include/c++/v1/bits/stdc++.h"
@@ -21,10 +21,11 @@ using namespace std;
 typedef long long int int2;
 const string name_minh = "3";
 #define int long long
-const int maxN = 1e5 + 5;
+const int maxN = 1e6 + 5;
 const int mod = 1000003;
 const long long inf = 1e17;
-int n, m, cnt, group[maxN], sum_group[maxN];
+
+int n, m, cnt, group[maxN], sum_group[maxN], dp[maxN];
 map<int, int> prefix_sub, prefix_dnc;
 vector<pair<int, int>> g[maxN], g_rev[maxN], g_group[maxN];
 vector<int> order;
@@ -53,25 +54,37 @@ void dfs_two(int u){
     }
 }
 int binary_search(int val){
-    int res = -1, l = 0, r = 1e6;
+    int res = -1, l = 0, r = 1e6 + 8e1;
+    
 
     while(l < r){
         int mid = (l + r) >> 1;
-        int vl = (mid * (mid + 1) * (mid + 2)) / 6;
-        //cout << vl << " " << val << endl;
+        int vl = (mid * (mid + 1)) / 2;
+        //cout << vl << endl;
         if(vl <= val){
             res = mid;
             l = mid + 1;
         }
         else r = mid; 
     }
-    //return res;
+   // return res;
     return val * (res + 1) - (res * (res + 1) * (res + 2)) / 6;
 }
 
-// int DP(int i){
-//     if()
-// }
+int DP(int i){
+    if(dp[i]) return dp[i];
+
+    dp[i] = sum_group[i];
+
+    for(pair<int, int> x: g_group[i]){
+        int v = x.first;
+        int w = x.second;
+        //cout << i << " " << v << endl;
+        dp[i] = max(dp[i], DP(v) + w + sum_group[i]);
+        //cout << dp[i] << endl;
+    }
+    return dp[i];
+}
 signed main(){
     IOS
     // #ifndef MINHDEPTRAI 
@@ -104,23 +117,22 @@ signed main(){
         cnt++;
         dfs_two(i);
     }
-    int i = 1, val, pos;
 
     foru(i, 1, n){
         for(pair<int, int> x: g[i]){
             int v = x.first;
             int mush = x.second;
-            if(group[v] != group[i]){
-                //cout << v << " " << i << " " << mush << " " << endl;
+            //cout << i << " " << v << endl;
+            if(group[v] == group[i]){
+                //cout << binary_search(mush) << " " << mush << endl;
                 sum_group[group[v]] += binary_search(mush);
-                //cout << i << " " << v << " " << binary_search(mush) << " " << mush << endl;
             }
             else {
-                sum_group[group[v]] += mush;
+                g_group[group[i]].push_back(mp(group[v], mush));
             }
-            //cout << v << " " << i << " " << mush << endl;
-            //cout << v << " " << i << " " << " " << mush << binary_search(mush) << endl;
+           
         }
     }
 
+    cout << DP(group[start]);
 }
