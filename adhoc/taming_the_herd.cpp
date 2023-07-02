@@ -1,7 +1,7 @@
 // #pragma GCC optimize("Ofast")
 // #pragma GCC optimize("unroll-loops")
 // special case: with 0 -1 -1 -1 4 (-1 is in the middle of two non-negative numbers).
-#define MINHDEPTRAI 1
+
 #ifdef MINHDEPTRAI
  
 #include "/Library/Developer/CommandLineTools/usr/include/c++/v1/bits/stdc++.h"
