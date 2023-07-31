@@ -1,5 +1,4 @@
-
-// #define MINHDEPTRAI 1
+// #define MINHDEPTRAI "/Volumes/icebear/source_code/VS_code"
 #ifdef MINHDEPTRAI
  
 #include "/Library/Developer/CommandLineTools/usr/include/c++/v1/bits/stdc++.h"
@@ -21,43 +20,42 @@ typedef pair<pair<int, int>, int> piii;
 #define endl '\n'
 using ld = long double;
 
-const string name_minh = "planting";
-const int maxN = 2e5 + 5;
-const int maxM = 4e5 + 5;
+const string name_minh = "stacking";
+const int maxN = 1e6 + 5;
+const int maxK =  3e5 + 5;
 const int mod = 1e9 + 7;
 const long long inf = 1e18;
 
-int arr[maxN];
+
+int n, arr[maxN], diff_array[maxN], k;
 void solve(){
-    ld n, d, h;
-    cin >> n >> d >> h;
+   cin >> n >> k;
+   foru(i, 1, k) {
+        int a, b;
+        cin >> a >> b;
+        diff_array[a]++;
+        diff_array[b + 1]--;
+   }
+   foru(i, 1, n){
+        arr[i] = diff_array[i] + arr[i - 1];
+   }
+  
+   sort(arr + 1, arr + n + 1);
+   n = n / 2 + (n % 2 != 0);
+   cout << arr[n];
 
-    foru(i, 1, n){
-        cin >> arr[i];
-    }
-    ld sum = (ld)(n * d * h) / 2;
-
-    foru(i, 2, n){
-        if(arr[i] - arr[i - 1] < h){
-            ld diff = arr[i] - arr[i - 1];
-            ld h_inter = h - diff;
-            ld d_inter = d - diff * (ld)(d / h);
-            sum -= (ld)(h_inter * d_inter) / 2;
-        }
-    }
-
-    cout << fixed << setprecision(7) << sum << endl;
 }
+
 signed  main() {
     IOS
 
     // #ifndef MINHDEPTRAI 
     // freopen((name_minh + ".in").c_str(), "r", stdin);
-    // freopen((name_minh + ".out").c_str(), "w", stdout);
+    //  freopen((name_minh + ".out").c_str(), "w", stdout);
     // #endif
-    int t;
-    cin >> t;
+    int t = 1;
     while(t--){
         solve();
     }
+  
 }
