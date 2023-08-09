@@ -27,6 +27,13 @@ const int mod = 1e9 + 7;
 const long long inf = 1e18;
 
 int num[maxN];
+
+// I learned about this problem from marvinthang.
+// Idea: If we split the array into at least 3 parts, such as
+//  a4 a1 a2 a3 a4 a1
+// then we must use at least one completely sum of all arrays.
+// Therefore, intitially, if we need to use a complete sum => we update val, and after that we use two-pointer method 
+//to solve shortest segment problem.
 void solve(){
     int n, val, sum = 0;
     cin >> n >> val;
