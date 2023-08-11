@@ -1,3 +1,5 @@
+#pragma GCC optimize("O3,unroll-loops")
+#pragma GCC target("avx2,bmi,bmi2,popcnt,lzcnt")
 #define MINHDEPTRAI "Volumes/icebear/source_code/VS_code"
 #ifdef MINHDEPTRAI
 
